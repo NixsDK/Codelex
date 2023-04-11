@@ -1,60 +1,71 @@
 <?php
-class EnergyDrink {
-private $name;
-private $sugarContent;
 
-public function __construct($name, $sugarContent) {
-$this->name = $name;
-$this->sugarContent = $sugarContent;
-}
+class EnergyDrink
+{
+    private $name;
+    private $sugarContent;
 
-public function getName() {
-return $this->name;
-}
+    public function __construct($name, $sugarContent)
+    {
+        $this->name = $name;
+        $this->sugarContent = $sugarContent;
+    }
 
-public function getSugarContent() {
-return $this->sugarContent;
-}
-}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-class EnergyDrinkInventory {
-private $inventory;
-
-public function __construct() {
-$this->inventory = array();
+    public function getSugarContent()
+    {
+        return $this->sugarContent;
+    }
 }
 
-public function addDrink(EnergyDrink $drink, $quantity) {
-if (array_key_exists($drink->getName(), $this->inventory)) {
-$this->inventory[$drink->getName()] += $quantity;
-} else {
-$this->inventory[$drink->getName()] = $quantity;
-}
-}
+class EnergyDrinkInventory
+{
+    private $inventory;
 
-public function getQuantity(EnergyDrink $drink) {
-if (array_key_exists($drink->getName(), $this->inventory)) {
-return $this->inventory[$drink->getName()];
-} else {
-return 0;
-}
-}
+    public function __construct()
+    {
+        $this->inventory = array();
+    }
 
-public function removeDrink(EnergyDrink $drink, $quantity) {
-if (array_key_exists($drink->getName(), $this->inventory)) {
-if ($this->inventory[$drink->getName()] >= $quantity) {
-$this->inventory[$drink->getName()] -= $quantity;
-return true;
-}
-}
-return false;
-}
+    public function addDrink(EnergyDrink $drink, $quantity)
+    {
+        if (array_key_exists($drink->getName(), $this->inventory)) {
+            $this->inventory[$drink->getName()] += $quantity;
+        } else {
+            $this->inventory[$drink->getName()] = $quantity;
+        }
+    }
 
-public function __toString() {
-$output = "";
-foreach ($this->inventory as $name => $quantity) {
-$output .= $name . ': ' . $quantity . PHP_EOL;
-}
-return $output;
-}
+    public function getQuantity(EnergyDrink $drink)
+    {
+        if (array_key_exists($drink->getName(), $this->inventory)) {
+            return $this->inventory[$drink->getName()];
+        } else {
+            return 0;
+        }
+    }
+
+    public function removeDrink(EnergyDrink $drink, $quantity)
+    {
+        if (array_key_exists($drink->getName(), $this->inventory)) {
+            if ($this->inventory[$drink->getName()] >= $quantity) {
+                $this->inventory[$drink->getName()] -= $quantity;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function __toString()
+    {
+        $output = "";
+        foreach ($this->inventory as $name => $quantity) {
+            $output .= $name . ': ' . $quantity . PHP_EOL;
+        }
+        return $output;
+    }
 }

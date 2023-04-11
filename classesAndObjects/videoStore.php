@@ -1,98 +1,115 @@
 <?php
-class Video {
-private $title;
-private $checkedOut;
-private $averageRating;
-private $totalRating;
-private $numRatings;
 
-public function __construct($title) {
-$this->title = $title;
-$this->checkedOut = false;
-$this->averageRating = 0.0;
-$this->totalRating = 0.0;
-$this->numRatings = 0;
-}
+class Video
+{
+    private $title;
+    private $checkedOut;
+    private $averageRating;
+    private $totalRating;
+    private $numRatings;
 
-public function getTitle() {
-return $this->title;
-}
+    public function __construct($title)
+    {
+        $this->title = $title;
+        $this->checkedOut = false;
+        $this->averageRating = 0.0;
+        $this->totalRating = 0.0;
+        $this->numRatings = 0;
+    }
 
-public function isCheckedOut() {
-return $this->checkedOut;
-}
+    public function getTitle()
+    {
+        return $this->title;
+    }
 
-public function getAverageRating() {
-return $this->averageRating;
-}
+    public function isCheckedOut()
+    {
+        return $this->checkedOut;
+    }
 
-public function addRating($rating) {
-$this->totalRating += $rating;
-$this->numRatings += 1;
-$this->averageRating = $this->totalRating / $this->numRatings;
-}
+    public function getAverageRating()
+    {
+        return $this->averageRating;
+    }
 
-public function checkOut() {
-$this->checkedOut = true;
-}
+    public function addRating($rating)
+    {
+        $this->totalRating += $rating;
+        $this->numRatings += 1;
+        $this->averageRating = $this->totalRating / $this->numRatings;
+    }
 
-public function returnVideo() {
-$this->checkedOut = false;
-}
+    public function checkOut()
+    {
+        $this->checkedOut = true;
+    }
 
-public function __toString() {
-$checkedOutStr = $this->isCheckedOut() ? "Checked out" : "On the shelves";
-return "{$this->title}, {$this->averageRating}, {$checkedOutStr}\n";
-}
-}
+    public function returnVideo()
+    {
+        $this->checkedOut = false;
+    }
 
-class VideoStore {
-private $videos;
-
-public function __construct() {
-$this->videos = array();
-}
-
-public function addVideo($title) {
-$video = new Video($title);
-$this->videos[] = $video;
+    public function __toString()
+    {
+        $checkedOutStr = $this->isCheckedOut() ? "Checked out" : "On the shelves";
+        return "{$this->title}, {$this->averageRating}, {$checkedOutStr}\n";
+    }
 }
 
-public function checkOutVideo($title) {
-foreach ($this->videos as $video) {
-if ($video->getTitle() == $title) {
-$video->checkOut();
-return true;
-}
-}
-return false;
-}
+class VideoStore
+{
+    private $videos;
 
-public function returnVideo($title) {
-foreach ($this->videos as $video) {
-if ($video->getTitle() == $title) {
-$video->returnVideo();
-return true;
-}
-}
-return false;
-}
+    public function __construct()
+    {
+        $this->videos = array();
+    }
 
-public function takeRating($title, $rating) {
-foreach ($this->videos as $video) {
-if ($video->getTitle() == $title) {
-$video->addRating($rating);
-return true;
-}
-}
-return false;
-}
+    public function addVideo($title)
+    {
+        $video = new Video($title);
+        $this->videos[] = $video;
+    }
 
-public function listInventory() {
-foreach ($this->videos as $video) {
-echo $video;
-}
-}
+    public function checkOutVideo($title)
+    {
+        foreach ($this->videos as $video) {
+            if ($video->getTitle() == $title) {
+                $video->checkOut();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function returnVideo($title)
+    {
+        foreach ($this->videos as $video) {
+            if ($video->getTitle() == $title) {
+                $video->returnVideo();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function takeRating($title, $rating)
+    {
+        foreach ($this->videos as $video) {
+            if ($video->getTitle() == $title) {
+                $video->addRating($rating);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function listInventory()
+    {
+        foreach ($this->videos as $video) {
+            echo $video;
+        }
+    }
 }
 
 // Test the functionality of the Video and VideoStore classes
