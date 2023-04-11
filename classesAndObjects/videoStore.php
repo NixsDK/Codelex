@@ -1,74 +1,114 @@
 <?php
-class Application
-{
-function run()
-{
-while (true) {
-echo "Choose the operation you want to perform:\n";
-echo "Choose 0 for EXIT\n";
-echo "Choose 1 to fill video store\n";
-echo "Choose 2 to rent video (as user)\n";
-echo "Choose 3 to return video (as user)\n";
-echo "Choose 4 to list inventory\n";
+class Video {
+private $title;
+private $checkedOut;
+private $averageRating;
+private $totalRating;
+private $numRatings;
 
-$command = (int)readline();
-
-switch ($command) {
-case 0:
-echo "Bye!\n";
-die;
-case 1:
-$this->add_movies();
-break;
-case 2:
-$this->rent_video();
-break;
-case 3:
-$this->return_video();
-break;
-case 4:
-$this->list_inventory();
-break;
-default:
-echo "Sorry, I don't understand you.\n";
-}
-}
+public function __construct($title) {
+$this->title = $title;
+$this->checkedOut = false;
+$this->averageRating = 0.0;
+$this->totalRating = 0.0;
+$this->numRatings = 0;
 }
 
-private function add_movies()
-{
-$movies = array(
-"Rocky IV" => "Drama",
-"Deadpool" => "Action",
-"Transformers" => "Science Fiction",
-"Wednesday" => "Comedy",
-"Pacific Rim" => "Science Fiction",
-"Anabella" => "Horror"
-);
-
-foreach ($movies as $name => $genre) {
-// Create a new Video object and add it to the VideoStore's inventory
-$video = new Video($name, $genre);
-VideoStore::add_video($video);
+public function getTitle() {
+return $this->title;
 }
 
-echo "Movies added successfully!\n";
+public function isCheckedOut() {
+return $this->checkedOut;
 }
 
-private function rent_video()
-{
-//todo
+public function getAverageRating() {
+return $this->averageRating;
 }
 
-private function return_video()
-{
-//todo
+public function addRating($rating) {
+$this->totalRating += $rating;
+$this->numRatings += 1;
+$this->averageRating = $this->totalRating / $this->numRatings;
 }
 
-private function list_inventory()
-{
-//todo
+public function checkOut() {
+$this->checkedOut = true;
+}
+
+public function returnVideo() {
+$this->checkedOut = false;
+}
+
+public function __toString() {
+$checkedOutStr = $this->isCheckedOut() ? "Checked out" : "On the shelves";
+return "{$this->title}, {$this->averageRating}, {$checkedOutStr}\n";
 }
 }
-$app = new Application();
-$app->run();
+
+class VideoStore {
+private $videos;
+
+public function __construct() {
+$this->videos = array();
+}
+
+public function addVideo($title) {
+$video = new Video($title);
+$this->videos[] = $video;
+}
+
+public function checkOutVideo($title) {
+foreach ($this->videos as $video) {
+if ($video->getTitle() == $title) {
+$video->checkOut();
+return true;
+}
+}
+return false;
+}
+
+public function returnVideo($title) {
+foreach ($this->videos as $video) {
+if ($video->getTitle() == $title) {
+$video->returnVideo();
+return true;
+}
+}
+return false;
+}
+
+public function takeRating($title, $rating) {
+foreach ($this->videos as $video) {
+if ($video->getTitle() == $title) {
+$video->addRating($rating);
+return true;
+}
+}
+return false;
+}
+
+public function listInventory() {
+foreach ($this->videos as $video) {
+echo $video;
+}
+}
+}
+
+// Test the functionality of the Video and VideoStore classes
+$store = new VideoStore();
+$store->addVideo("The Matrix");
+$store->addVideo("Godfather II");
+$store->addVideo("Star Wars Episode IV: A New Hope");
+
+$store->takeRating("The Matrix", 5);
+$store->takeRating("The Matrix", 4);
+$store->takeRating("The Matrix", 5);
+$store->takeRating("Godfather II", 5);
+$store->takeRating("Godfather II", 5);
+$store->takeRating("Star Wars Episode IV: A New Hope", 4);
+$store->takeRating("Star Wars Episode IV: A New Hope", 5);
+
+$store->checkOutVideo("Godfather II");
+
+$store->listInventory();
