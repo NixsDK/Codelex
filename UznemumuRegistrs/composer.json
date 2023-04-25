@@ -1,0 +1,17 @@
+{
+    "name": "niksdk/dati",
+    "autoload": {
+        "psr-4": {
+            "Niksdk\\Dati\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "NixsDK",
+            "email": "niksdanielskalnins@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.5"
+    }
+}
